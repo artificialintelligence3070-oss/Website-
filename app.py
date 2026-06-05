@@ -10,10 +10,13 @@ def index():
 @app.route('/get-video', methods=['POST'])
 def get_video():
     url = request.json.get('url')
-    # Using a reliable public API endpoint to fetch video info
-    api_url = f"https://api.cobalt.tools/api/json"
+    # Using Cobalt API which is very stable
+    api_url = "https://api.cobalt.tools/api/json"
     payload = {"url": url, "vCodec": "h264"}
-    headers = {"Accept": "application/json", "Content-Type": "application/json"}
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
     
     try:
         response = requests.post(api_url, json=payload, headers=headers)
@@ -21,7 +24,7 @@ def get_video():
         if "url" in data:
             return jsonify({"success": True, "url": data["url"]})
         else:
-            return jsonify({"success": False, "error": "Could not extract video"})
+            return jsonify({"success": False, "error": "Could not fetch video"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
