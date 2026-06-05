@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>VERNEX Downloader</title>
     <style>
         body { background: #0f0f1b; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 400px; text-align: center; }
-        input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 15px; border: none; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #00d4ff; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        .card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 30px; backdrop-filter: blur(20px); width: 300px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border-radius: 10px; border: none; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #00d4ff; border: none; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>VERNEX</h1>
-        <input type="text" id="url" placeholder="লিংক এখানে দিন...">
-        <button onclick="process()">ডাউনলোড করুন</button>
+        <input type="text" id="url" placeholder="Paste URL here...">
+        <button onclick="process()">Download</button>
         <p id="status"></p>
     </div>
     <script>
         async function process() {
             let url = document.getElementById('url').value;
             let status = document.getElementById('status');
-            status.innerText = "প্রসেসিং হচ্ছে...";
+            if(!url) return;
+            status.innerText = "Processing...";
             let res = await fetch('/get-video', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -29,7 +30,7 @@
             });
             let data = await res.json();
             if(data.success) { window.location.href = data.url; }
-            else { alert("লিংক কাজ করছে না!"); }
+            else { status.innerText = "Error: " + data.error; }
         }
     </script>
 </body>
